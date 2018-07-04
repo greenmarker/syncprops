@@ -35,14 +35,15 @@ public class SortPropsApacheCommons extends AbstractMojo {
         new SortPropsApacheCommons().execute();
     }
 
-    private static void updateProps(File file, File fileWithDefaults) {
+    private void updateProps(File file, File fileWithDefaults) {
+        getLog().info("Updating file: " + file.getName());
         PropertiesConfiguration propsBase = new PropertiesConfiguration();
-        PropertiesConfiguration propsPL = new PropertiesConfiguration();
+        PropertiesConfiguration props = new PropertiesConfiguration();
 
         try {
             propsBase.read(new FileReader(fileWithDefaults));
-            propsPL.read(new FileReader(file));
-            propsBase.copy(propsPL);
+            props.read(new FileReader(file));
+            propsBase.copy(props);
 
             propsBase.write(new FileWriter(file));
         } catch (ConfigurationException | IOException e) {
@@ -51,7 +52,7 @@ public class SortPropsApacheCommons extends AbstractMojo {
 
     }
 
-    class PropertyFileFilter extends AbstractFileFilter {
+    private class PropertyFileFilter extends AbstractFileFilter {
         private String bundleName;
         public PropertyFileFilter(String bundleName) {
             this.bundleName = bundleName;
